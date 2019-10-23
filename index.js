@@ -12,7 +12,8 @@ try {
   const payload = JSON.stringify(github.context.payload, undefined, 2)
   console.log(`The event payload: ${payload}`);
 
-  exec.exec('ansible-playbook --version');
+  exec.exec('git clone https://github.com/saintube/Kube-Test.git')
+  exec.exec('cd Kube-Test && ls && ansible-playbook --version');
 } catch (error) {
   core.setFailed(error.message);
 }
