@@ -1,5 +1,5 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'Kube Test'
+description: 'run testing experiments and CI pipelines on Kubernetes and GitHub Actions'
 inputs:
   who-to-greet:  # id of input
     description: 'Who to greet'

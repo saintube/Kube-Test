@@ -1,23 +1,28 @@
-# Hello world JavaScript action
+# Kube Test Action
 
-This action prints "Hello World" or "Hello" + the name of a person to greet to the log. To learn how this action was built, see "[Creating a JavaScript action](https://help.github.com/en/articles/creating-a-javascript-action)" in the GitHub Help documentation.
+This [GitHub action](https://github.com/features/actions) will handle the CI workflow and help run testing experiments on Kubernetes.
 
-## Inputs
-
-### `who-to-greet`
-
-**Required** The name of the person to greet. Default `"World"`.
-
-## Outputs
-
-### `time`
-
-The time we greeted you.
-
-## Example usage
+## Getting Started
 
 ```yaml
-uses: actions/hello-world-javascript-action@master
-with:
-  who-to-greet: 'Mona the Octocat'
+name: CI
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: KinD (Kubernetes in Docker) Action
+      uses: engineerd/setup-kind@v0.1.0
+    - name: Kube Test Action
+      uses: saintube/Kube-Test@master
+      with:
+        who-to-greet: 'Mona the Octocat'
+    - name: Testing - Create Deployment
+      run: |
+        export KUBECONFIG="$(kind get kubeconfig-path)"
+        kubectl get pods --all-namespaces
 ```
+
+## Configuration
+
+(null)
