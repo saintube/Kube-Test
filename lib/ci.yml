@@ -8,35 +8,47 @@
   tasks:
     - block:
 
-        - name: Deployer
-          include_tasks: /funclib/helm_deployer.yml
-          vars:
-            action: deploy
-            chart_path: {{ CHART_PATH }}
-
-        - name: Whatever you want
-          shell: ...
+        - name: Test
+          shell: >
+            echo "hello action!"
           args:
             executable: /bin/bash
-          register: sh_result
 
-        - name: App Pod Failure
-          include_tasks: /experiments/chaos/app_pod_failure.yml
-          vars:
-            app_ns: default
-            app_label: "'statefulset.kubernetes.io/pod-name=cass-demo-dc1-rack1-0'"
-            deploy_type: statefulset
-            LIVENESS_APP_LABEL: ""
-            LIVENESS_APP_NAMESPACE: ""
-            setup_script: ""
-            check_script: ""
-            cleanup_script: ""
+        - name: Test Input
+          shell: >
+            echo {{ CHART_PATH }}
+          args:
+            executable: /bin/bash
 
-        - name: Deployer
-          include_tasks: /funclib/helm_deployer.yml
-          vars:
-            action: delete
-            chart_path: "./charts"
+        # - name: Deployer
+        #   include_tasks: /funclib/helm_deployer.yml
+        #   vars:
+        #     action: deploy
+        #     chart_path: {{ CHART_PATH }}
 
-        - name: View Generation
-          include_tasks: /funclib/call_generator.yml
+        # - name: Whatever you want
+        #   shell: ...
+        #   args:
+        #     executable: /bin/bash
+        #   register: sh_result
+
+        # - name: App Pod Failure
+        #   include_tasks: /experiments/chaos/app_pod_failure.yml
+        #   vars:
+        #     app_ns: default
+        #     app_label: "'statefulset.kubernetes.io/pod-name=cass-demo-dc1-rack1-0'"
+        #     deploy_type: statefulset
+        #     LIVENESS_APP_LABEL: ""
+        #     LIVENESS_APP_NAMESPACE: ""
+        #     setup_script: ""
+        #     check_script: ""
+        #     cleanup_script: ""
+
+        # - name: Deployer
+        #   include_tasks: /funclib/helm_deployer.yml
+        #   vars:
+        #     action: delete
+        #     chart_path: "./charts"
+
+        # - name: View Generation
+        #   include_tasks: /funclib/call_generator.yml
