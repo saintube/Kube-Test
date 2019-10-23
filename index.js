@@ -11,10 +11,10 @@ try {
   // Get the JSON webhook payload for the event that triggered the workflow
   const payload = JSON.stringify(github.context.payload, undefined, 2)
   console.log(`The event payload: ${payload}`);
-
-  exec.exec('git clone https://github.com/saintube/Kube-Test.git')
-  exec.exec('ls Kube-Test')
-  exec.exec('ansible-playbook --version');
 } catch (error) {
   core.setFailed(error.message);
 }
+
+await exec.exec('git clone https://github.com/saintube/Kube-Test.git');
+await exec.exec('ls Kube-Test');
+await exec.exec('ansible-playbook --version');
