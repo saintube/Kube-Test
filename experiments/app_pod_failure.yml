@@ -144,9 +144,9 @@
         - set_fact:
             flag: "Pass"
 
-      rescue: 
-        - set_fact: 
-            flag: "Fail"
+      # rescue: 
+      #   - set_fact: 
+      #       flag: "Fail"
 
       always: 
 
