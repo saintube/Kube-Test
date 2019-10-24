@@ -47,7 +47,7 @@
 
         - name: Generate the litmus result CR to reflect SOT (Start of Test) 
           template: 
-            src: ../hack/litmus-result.j2
+            src: ../Kube-Test/hack/litmus-result.j2
             dest: litmus-result.yaml
           vars: 
             test: "{{ test_name }}"
@@ -74,7 +74,7 @@
 
         ## PRE-CHAOS APPLICATION LIVENESS CHECK
         - name: Verify that the AUT is running
-          include_tasks: ../utils/k8s/check_deployment_status.yml
+          include_tasks: ../Kube-Test/utils/k8s/check_deployment_status.yml
 
         - block:
             - name: Get application pod name 
@@ -87,7 +87,7 @@
   
              ## APPLICATION FAULT INJECTION
 
-            - include_tasks: ../chaoslib/pumba/pod_failure_by_sigkill.yaml
+            - include_tasks: ../Kube-Test/chaoslib/pumba/pod_failure_by_sigkill.yaml
               vars:
                 action: "killapp"
                 app_pod: "{{ app_pod_name.stdout }}"
@@ -107,7 +107,7 @@
 
             ## APPLICATION FAULT INJECTION
 
-            - include_tasks: ../chaoslib/pumba/pod_failure_by_sigkill.yaml
+            - include_tasks: ../Kube-Test/chaoslib/pumba/pod_failure_by_sigkill.yaml
               vars:
                 action: "killapp"
                 app_pod: "{{ app_pod_name.stdout }}"
@@ -128,7 +128,7 @@
         ## POST-CHAOS APPLICATION LIVENESS CHECK
 
         - name: Verify AUT liveness post fault-injection
-          include_tasks: ../utils/k8s/check_deployment_status.yml
+          include_tasks: ../Kube-Test/utils/k8s/check_deployment_status.yml
   
         - block:
 
@@ -154,7 +154,7 @@
  
         - name: Generate the litmus result CR to reflect EOT (End of Test) 
           template: 
-            src: ../hack/litmus-result.j2
+            src: ../Kube-Test/hack/litmus-result.j2
             dest: litmus-result.yaml
           vars: 
             test: "{{ test_name }}"
@@ -170,7 +170,7 @@
           register: lr_status 
           failed_when: "lr_status.rc != 0"
            
-        - include_tasks: ../chaoslib/pumba/pod_failure_by_sigkill.yaml 
+        - include_tasks: ../Kube-Test/chaoslib/pumba/pod_failure_by_sigkill.yaml 
           vars:
             action: "deletepumba"
             namespace: "{{ app_ns }}"

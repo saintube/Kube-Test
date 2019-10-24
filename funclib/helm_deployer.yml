@@ -54,8 +54,8 @@
     
     - name: Apply the CRD into cluster
       shell: |
-        kubectl create -f ../manifest/crds.yaml
-        kubectl create -f ../manifest/rbac.yaml
+        kubectl create -f ../Kube-Test/manifest/crds.yaml
+        kubectl create -f ../Kube-Test/manifest/rbac.yaml
 
       
   when: action == "deploy"
