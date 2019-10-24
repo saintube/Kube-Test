@@ -21,17 +21,6 @@
       delay: 5
       retries: 120
     
-    
-    - name: Authorization the tiller to deploy application
-      shell: | 
-        kubectl create clusterrolebinding permissive-binding \
-          --clusterrole=cluster-admin \
-          --user=admin \
-          --user=kubelet \
-          --group=system:serviceaccounts
-      args:
-        executable: /bin/bash
-    
     - name: Wait until tiller is installed
       shell: kubectl get pod -n kube-system | grep tiller-deploy 
       register: status
@@ -41,7 +30,17 @@
 
       
 - block:
-      
+
+    - name: Authorization the tiller to deploy application
+      shell: | 
+        kubectl create clusterrolebinding permissive-binding \
+          --clusterrole=cluster-admin \
+          --user=admin \
+          --user=kubelet \
+          --group=system:serviceaccounts
+      args:
+        executable: /bin/bash
+
     - name: Deploy the application to the cluster.
       shell: helm install {{ github_workspace }}/{{ chart_path }} --name {{ name.stdout }}
       args:
@@ -56,16 +55,51 @@
       shell: |
         kubectl create -f ../Kube-Test/manifest/crds.yaml
         kubectl create -f ../Kube-Test/manifest/rbac.yaml
-
       
   when: action == "deploy"
+
+- block:
+
+    - name: Authorization the tiller to deploy application
+      shell: | 
+        kubectl create clusterrolebinding permissive-binding \
+          --clusterrole=cluster-admin \
+          --user=admin \
+          --user=kubelet \
+          --group=system:serviceaccounts
+      args:
+        executable: /bin/bash
+
+    - name: Add chart repository.
+      shell: |
+        helm repo add temp {{ repo_path }}
+        helm repo update
+      args:
+        executable: /bin/bash
+
+    - name: Deploy the application from chart repository.
+      shell: helm install {{ chart_path }} --name {{ name.stdout }}
+      args:
+        executable: /bin/bash
+         
+    - name: Check if the application has been deployed
+      shell: helm list
+      args:
+        executable: /bin/bash
     
+    - name: Apply the CRD into cluster
+      shell: |
+        kubectl create -f ../Kube-Test/manifest/crds.yaml
+        kubectl create -f ../Kube-Test/manifest/rbac.yaml
+
+  when: action == "deploy_repo"
     
 - block:
     - name: Delete the deplyed application
       shell: helm del --purge {{ name.stdout }}
       args:
         executable: /bin/bash
+
   when: action == "delete"
         
     
