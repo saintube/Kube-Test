@@ -1,0 +1,136 @@
+---
+
+    # vars:
+    #   test_name: pod-delete
+    #   app_ns: default
+    #   app_label: "'app=label'"
+    #   deploy_type: 'deployment'
+    #   c_duration: "15"
+    #   c_interval: "5"
+    #   c_force: "true"
+    #   setup_script: ""
+    #   check_script: ""
+    #   cleanup_script: ""
+  
+    - block:
+
+        ## Setup
+
+        - block:
+
+            - name: Setup
+              shell: bash {{ setup_script }}
+
+          when: setup_script != ''  
+
+        ## RECORD START-OF-EXPERIMENT IN LITMUSCHAOS RESULT CR
+
+        - block:
+ 
+            - name: Record test instance/run ID 
+              set_fact: 
+                run_id: "{{ lookup('env','RUN_ID') }}"
+           
+            - name: Construct testname appended with runID
+              set_fact:
+                test_name: "{{ test_name }}-{{ run_id }}"
+
+          when: lookup('env','RUN_ID')
+
+        - name: Generate the litmus result CR to reflect SOT (Start of Test) 
+          template: 
+            src: /litmus-result.j2
+            dest: litmus-result.yaml
+          vars: 
+            test: "{{ test_name }}"
+            chaostype: ""
+            app: ""
+            phase: in-progress
+            verdict: none
+
+        - name: Apply the litmus result CR
+          shell: kubectl apply -f litmus-result.yaml
+          args:
+            executable: /bin/bash
+          register: lr_status 
+          failed_when: "lr_status.rc != 0"
+
+        ## DISPLAY APP INFORMATION 
+ 
+        - name: Display the app information passed via the test job
+          debug: 
+            msg: 
+              - "The application info is as follows:"
+              - "Namespace    : {{ app_ns }}"
+              - "Label        : {{ app_label }}"
+
+        ## PRE-CHAOS APPLICATION LIVENESS CHECK
+
+        - name: Verify that the AUT (Application Under Test) is running 
+          include_tasks: "/utils/k8s/status_app_pod.yml"
+          vars:
+            app_namespace: "{{ app_ns }}"
+            app_lkey: "{{ app_label.split('=')[0] }}"
+            app_lvalue: "{{ app_label.split('=')[1] }}"
+            delay: 1
+            retries: 60
+
+        ## FAULT INJECTION 
+
+        - include_tasks: /chaoslib/litmus/app_pod_random_delete.yaml
+          vars:
+            namespace: "{{ app_ns }}"
+            label: "{{ app_label }}"
+            kind: "{{ deploy_type }}"
+            chaos_duration: "{{ c_duration }}"
+            chaos_interval: "{{ c_interval }}"
+
+        ## Checkpoint execution
+
+        - block:
+
+            - name: Checkpoint
+              shell: bash {{ check_script }}
+
+          when: check_script != ''
+          
+        ## POST-CHAOS APPLICATION LIVENESS CHECK
+
+        - name: Verify AUT liveness post fault-injection
+          include_tasks: /utils/k8s/check_deployment_status.yml
+
+        - set_fact:
+            flag: "pass"
+
+      rescue: 
+        - set_fact: 
+            flag: "fail"
+
+      always: 
+ 
+        ## RECORD END-OF-TEST IN LITMUSCHAOS RESULT CR
+
+        - name: Generate the litmus result CR to reflect EOT (End of Test) 
+          template: 
+            src: /litmus-result.j2
+            dest: litmus-result.yaml
+          vars: 
+            test: "{{ test_name }}"
+            chaostype: ""
+            app: ""
+            phase: completed
+            verdict: "{{ flag }}"
+           
+        - name: Apply the litmus result CR
+          shell: kubectl apply -f litmus-result.yaml
+          args:
+            executable: /bin/bash
+          register: lr_status 
+          failed_when: "lr_status.rc != 0"
+
+        - block:
+
+            - name: Cleanup
+              shell: bash {{ cleanup_script }}
+
+          when: cleanup_script != ''
