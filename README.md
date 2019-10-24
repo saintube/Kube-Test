@@ -1,28 +1,86 @@
 # Kube Test Action
 
-This [GitHub action](https://github.com/features/actions) will handle the CI workflow and help run testing experiments on Kubernetes.
+This [GitHub Actions](https://github.com/features/actions) will handle the CI workflow and help run testing experiments on Kubernetes.
 
-## Getting Started
+## Overview
+
+![Overview](./docs/images/Overview.png)
+
+## QuickStart
+
+To trigger our action service, firstly you should specify our action in your GitHub Workflow:
 
 ```yaml
 name: CI
 on: [push]
 jobs:
-  build:
+  test_action:
     runs-on: ubuntu-latest
     steps:
-    - name: KinD (Kubernetes in Docker) Action
-      uses: engineerd/setup-kind@v0.1.0
-    - name: Kube Test Action
-      uses: saintube/Kube-Test@master
-      with:
-        who-to-greet: 'Mona the Octocat'
-    - name: Testing - Create Deployment
-      run: |
-        export KUBECONFIG="$(kind get kubeconfig-path)"
-        kubectl get pods --all-namespaces
+      # Setup a KinD cluster
+      - name: KinD (Kubernetes in Docker) Action
+        uses: engineerd/setup-kind@v0.1.0
+      - name: Checkout
+        uses: actions/checkout@master
+      # Specify our action
+      - name: Kube Test Action
+        uses: saintube/Kube-Test@master
 ```
 
-## Configuration
+Then you are able to define your Kube Test workflow in `<repo_root>/.kubetest/ci.yml`:
 
-(null)
+```yaml
+---
+- hosts: localhost
+  connection: local
+
+  vars_files:
+    - ../Kube-Test/env.yml
+
+  vars:
+    CHART_PATH: "./charts/"
+
+  environment:
+    KUBECONFIG: "{{ kube_config }}"
+
+  tasks:
+    - block:
+
+        - name: Test KinD
+          shell: >
+            kubectl get pods --all-namespaces
+          args:
+            executable: /bin/bash
+
+        - name: Test
+          shell: >
+            echo "hello action!"
+          args:
+            executable: /bin/bash
+
+        - name: Create new ns
+          shell: kubectl create ns mysql-operator
+          args:
+            executable: /bin/bash
+
+        - name: Deploy the app
+          include_tasks: ../Kube-Test/funclib/helm_deployer.yaml
+          vars:
+            action: "deploy"
+            chart_path: charts/kubedb
+
+        - name: Experiment - Pod Delete
+          include_tasks: ../Kube-Test/experiments/pod-delete.yaml
+          vars:
+            app_ns: "default"
+            app_label: "'app=kubedb'"
+            deploy_type: "deployment"
+            test_name: "pod-delete"
+            c_duration: "15"
+            c_interval: "5"
+            c_force: "true"
+            setup_script: ""
+            check_script: ""
+            cleanup_script: ""
+
+```
