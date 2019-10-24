@@ -48,12 +48,12 @@
             phase: in-progress
             verdict: none
 
-        - name: Apply the litmus result CR
-          shell: kubectl apply -f litmus-result.yaml
-          args:
-            executable: /bin/bash
-          register: lr_status 
-          failed_when: "lr_status.rc != 0"
+        # - name: Apply the litmus result CR
+        #   shell: kubectl apply -f litmus-result.yaml
+        #   args:
+        #     executable: /bin/bash
+        #   register: lr_status 
+        #   failed_when: "lr_status.rc != 0"
 
         ## DISPLAY APP INFORMATION 
  
@@ -121,12 +121,12 @@
             phase: completed
             verdict: "{{ flag }}"
            
-        - name: Apply the litmus result CR
-          shell: kubectl apply -f litmus-result.yaml
-          args:
-            executable: /bin/bash
-          register: lr_status 
-          failed_when: "lr_status.rc != 0"
+        # - name: Apply the litmus result CR
+        #   shell: kubectl apply -f litmus-result.yaml
+        #   args:
+        #     executable: /bin/bash
+        #   register: lr_status 
+        #   failed_when: "lr_status.rc != 0"
 
         - block:
 
