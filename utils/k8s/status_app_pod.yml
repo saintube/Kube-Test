@@ -1,7 +1,8 @@
 ---
-- name: Get debug
-  shell: > 
-    kubectl get pod -n {{ app_namespace }} -l {{app_lkey}}="{{app_lvalue}}" -o custom-columns=:..containerStatuses
+- name: Get the container status of application.
+  shell: >
+     kubectl get pod -n {{ app_namespace }} -l {{app_lkey}}="{{app_lvalue}}"
+     -o custom-columns=:..containerStatuses 
   args:
     executable: /bin/bash
     
