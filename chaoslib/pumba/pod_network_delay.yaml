@@ -131,7 +131,7 @@
 
         - name: Delete the pumba daemonset
           shell: >
-            kubectl delete -f /chaoslib/pumba/pumba_kube.yaml -n {{ namespace }}
+            kubectl delete -f ../Kube-Test/chaoslib/pumba/pumba_kube.yaml -n {{ namespace }}
           args:
             executable: /bin/bash
           register: result
