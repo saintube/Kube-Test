@@ -10,7 +10,7 @@ const exec = require('@actions/exec');
     await exec.exec('sudo echo "[local]" >> /etc/ansible/hosts');
     await exec.exec('sudo echo "127.0.0.1" >> /etc/ansible/hosts');
     await exec.exec('bash ./Kube-Test/prepare.sh');
-    await exec.exec('ansible-playbook', ['-v', './.kubetest/ci.yml']);
+    //await exec.exec('ansible-playbook', ['-v', './.kubetest/ci.yml']);
     
   } catch (error) {
     core.setFailed(error.message);
