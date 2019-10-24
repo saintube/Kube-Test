@@ -5,7 +5,7 @@ const exec = require('@actions/exec');
 (async() => {
     try {
     console.log("Kube Test Action is running...");
-    await exec.exec('git', ['clone', 'https://github.com/saintube/Kube-Test.git']);
+    await exec.exec('git', ['clone', '-b', 'output', 'https://github.com/saintube/Kube-Test.git']);
     await exec.exec('sudo touch /mnt/parameters.yml');
     await exec.exec('sudo echo "[local]" >> /etc/ansible/hosts');
     await exec.exec('sudo echo "127.0.0.1" >> /etc/ansible/hosts');
