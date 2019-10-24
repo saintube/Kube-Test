@@ -99,13 +99,6 @@
       ignore_errors: true
       register: result
 
-    - name: Display the app information passed via the test job
-      debug: 
-        msg: 
-          - "The application info is as follows:"
-          - "Namespace    : {{ namespace }}"
-          - "Label        : {{ label }}"
-
     - name: Verify restartCount
       shell: >
         kubectl get pod {{ app_pod_ut }} -n {{ namespace }}
