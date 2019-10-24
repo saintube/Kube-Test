@@ -71,7 +71,7 @@
 
 - name: Tear down chaoskube infrastructure
   shell: |
-    kubectl delete -f /chaoslib/chaoskube/chaoskube.yaml -n {{ namespace }}
-    kubectl delete -f /chaoslib/chaoskube/rbac.yaml -n {{ namespace }}
+    kubectl delete -f ../Kube-Test/chaoslib/chaoskube/chaoskube.yaml -n {{ namespace }}
+    kubectl delete -f ../Kube-Test/chaoslib/chaoskube/rbac.yaml -n {{ namespace }}
   args:
     executable: /bin/bash
