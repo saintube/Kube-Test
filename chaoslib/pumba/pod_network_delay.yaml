@@ -3,7 +3,7 @@
 
     - name: Setup pumba chaos infrastructure
       shell: >
-        kubectl apply -f /chaoslib/pumba/pumba_kube.yaml
+        kubectl apply -f ../Kube-Test/chaoslib/pumba/pumba_kube.yaml
         -n {{ namespace }}
       args:
         executable: /bin/bash

@@ -1,7 +1,7 @@
 - name: Setup chaoskube infrastructure
   shell: |
-    kubectl apply -f /chaoslib/chaoskube/rbac.yaml -n {{ namespace }}
-    kubectl apply -f /chaoslib/chaoskube/chaoskube.yaml -n {{ namespace }}
+    kubectl apply -f ../Kube-Test/chaoslib/chaoskube/rbac.yaml -n {{ namespace }}
+    kubectl apply -f ../Kube-Test/chaoslib/chaoskube/chaoskube.yaml -n {{ namespace }}
   args:
     executable: /bin/bash
 
