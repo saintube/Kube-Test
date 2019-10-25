@@ -236,13 +236,13 @@ def writeStatisticalInfo(list, file_rawname, filename):
 
         f.write('=== \n')
         f.write('\n')
-        f.write('标题： CommitID: ')
+        f.write('标题： CommitID[ ')
         with open(filename, 'r') as fp:
             lines = fp.readlines()
             last_line = lines[-1].strip('\n')
-        GITHUB_SHA = last_line
+        GITHUB_SHA = last_line[:10]
         f.write(GITHUB_SHA)
-        #f.write(']')
+        f.write(']')
         f.write(get_FileCreateTime(file_rawname))
         f.write('\n标签： ')
 
