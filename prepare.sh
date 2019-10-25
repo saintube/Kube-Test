@@ -7,16 +7,13 @@ echo "kube_config: \"$kubeconfig\"" > env.yml
 ansible-playbook -v $GITHUB_WORKSPACE/.kubetest/ci.yml >> demo.log
 cat demo.log
 cp $GITHUB_WORKSPACE/.kubetest/*.yaml ./
-ls $GITHUB_WORKSPACE/.kubetest/
-ls
 
 #cp $GITHUB_WORKSPACE/Kube-Test/kubeTestMarkdownGen.py ./
 
 python3 kubeTestMarkdownGen.py
 ls
-ls $GITHUB_WORKSPACE/Kube-Test
 
-cp dashboardData.json $GITHUB_WORKSPACE/src/dashboardData/
+cp dashboard.json $GITHUB_WORKSPACE/src/dashboardData/
 cp -r posts/* $GITHUB_WORKSPACE/src/posts/
 
 
