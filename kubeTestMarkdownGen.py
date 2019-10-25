@@ -38,7 +38,7 @@ def readYaml():
             caseName = yaml_obj['metadata']['name']
             chaostype = yaml_obj['spec']['testMetadata']['chaostype']
             result = yaml_obj['spec']['testStatus']['result']
-            if result == 'Pass':
+            if result == 'pass':
                 result_pass += 1
 
             dict['caseName'] = caseName
