@@ -70,7 +70,7 @@ def readYaml():
     article = json.dumps(data,ensure_ascii=False)
     #print(article)
 
-    with open('datashboard.json', 'w') as f:
+    with open('dashboard.json', 'w') as f:
         json.dump(data,f)
 
     #return dict
