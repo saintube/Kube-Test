@@ -8,7 +8,7 @@ ansible-playbook -v $GITHUB_WORKSPACE/.kubetest/ci.yml >> demo.log
 cat demo.log
 cp $GITHUB_WORKSPACE/.kubetest/*.yaml ./
 
-cp $GITHUB_WORKSPACE/Kube-Test/kubeTestMarkdownGen.py ./
+#cp $GITHUB_WORKSPACE/Kube-Test/kubeTestMarkdownGen.py ./
 
 python3 kubeTestMarkdownGen.py
 

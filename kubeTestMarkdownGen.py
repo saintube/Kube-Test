@@ -8,7 +8,6 @@ import json
 from random import choice
 
 
-
 root_folder = './'  # 将被递归的文件夹根目录
 save_txt = './paths.txt'  # 记录路径的文档
 suffix_name = '.log'  # 后缀名
@@ -27,7 +26,7 @@ def readYaml():
 
     f = open('./caseLogPath.txt', "r")
     lines = f.readlines()
-    print(len(lines))
+    #print(len(lines))
     result_pass = 0
     for line in lines:
         dict = {}
@@ -103,6 +102,8 @@ def clearColour(rawString):
         rawString = rawString.replace('[0m', '')
     if '' in rawString:
         rawString = rawString.replace('', '')
+    if '  \n' in rawString:
+        rawString = rawString.replace('  \n', '\n')
     return rawString
 
 
@@ -138,12 +139,13 @@ def statisticalInfo(filename):
     result = []
     file = open(filename, 'r', encoding='utf-8')
     # temp = file.readlines()
+    temp_str = '0123456789'
     for line in file.readlines():
 
         if "ok=" in line:
             okindex = int(line.index("ok=")) + 3
             okstr = ''
-            while okindex < len(line) and line[okindex] != ' ':
+            while okindex < len(line) and line[okindex] in temp_str:
                 okstr += line[okindex]
                 okindex += 1
             result.append(int(okstr))
@@ -153,7 +155,7 @@ def statisticalInfo(filename):
         if "changed=" in line:
             changeindex = line.index("changed=") + 8
             changestr = ''
-            while changeindex < len(line) and line[changeindex] != ' ':
+            while changeindex < len(line) and line[changeindex] in temp_str:
                 changestr += line[changeindex]
                 changeindex += 1
             result.append(int(changestr))
@@ -163,7 +165,7 @@ def statisticalInfo(filename):
         if "unreachable=" in line:
             unreachableindex = line.index("unreachable=") + 12
             unreachablestr = ''
-            while unreachableindex < len(line) and line[unreachableindex] != ' ':
+            while unreachableindex < len(line) and line[unreachableindex] in temp_str:
                 unreachablestr += line[unreachableindex]
                 unreachableindex += 1
             result.append(int(unreachablestr))
@@ -173,9 +175,11 @@ def statisticalInfo(filename):
         if "failed=" in line:
             failedindex = line.index("failed=") + 7
             failedstr = ''
-            while failedindex < len(line) and line[failedindex] != '   ':
+            #temp_str = '0123456789'
+            while failedindex < len(line) and line[failedindex] in temp_str:
                 failedstr += line[failedindex]
                 failedindex += 1
+            #print(failedstr)
             result.append(int(failedstr))
             # result['failed']=int(failedstr)
             #print("failed = ", int(failedstr))
@@ -188,6 +192,10 @@ def statisticalInfo(filename):
 def removeFile():
     if os.path.exists('./text2.txt'):
         os.remove('./text2.txt')
+    if os.path.exists('./paths.txt'):
+        os.remove('./paths.txt')
+    if os.path.exists('./caseLogPath.txt'):
+        os.remove('./caseLogPath.txt')
     # print("Done !")
 
 
