@@ -8,6 +8,7 @@ ansible-playbook -v $GITHUB_WORKSPACE/.kubetest/ci.yml >> demo.log
 echo $GITHUB_SHA >> demo.log
 cat demo.log
 cp $GITHUB_WORKSPACE/.kubetest/*.yaml ./
+cat $GITHUB_WORKSPACE/.kubetest/pod-delete-litmus-result.yaml
 
 #cp $GITHUB_WORKSPACE/Kube-Test/kubeTestMarkdownGen.py ./
 
