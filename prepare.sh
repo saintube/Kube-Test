@@ -8,12 +8,12 @@ ansible-playbook -v $GITHUB_WORKSPACE/.kubetest/ci.yml >> demo.log
 cat demo.log
 cp $GITHUB_WORKSPACE/.kubetest/*.yaml ./
 
-cp ../Kube-Test/kubeTestMarkdownGen.py ./
+cp $GITHUB_WORKSPACE/Kube-Test/kubeTestMarkdownGen.py ./
 
 python3 kubeTestMarkdownGen.py
 
-cp dashboardData.json src/dashboardData/
-cp -r posts/* src/posts/
+cp dashboardData.json $GITHUB_WORKSPACE/src/dashboardData/
+cp -r posts/* $GITHUB_WORKSPACE/src/posts/
 
 
 #ls $GITHUB_WORKSPACE/
