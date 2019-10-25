@@ -11,7 +11,7 @@ const exec = require('@actions/exec');
     console.log("Pulling KinD image from DockerHub...")
     await exec.exec('docker pull saintube/kind:v1.14.4')
     await exec.exec('bash ./Kube-Test/print_KinD.sh')
-    await exec.exec('sleep 40s')
+    await exec.exec('sleep 120s')
 
     await exec.exec('wget -O ./Kube-Test/kubeconfig http://172.17.0.2:10080/config')
     await exec.exec('sed -i "s/172.17.0.2/minikube/g" ./Kube-Test/kubeconfig')
