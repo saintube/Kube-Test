@@ -1,13 +1,5 @@
 name: 'Kube Test'
 description: 'run testing experiments and CI pipelines on Kubernetes and GitHub Actions'
-inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
-    required: true
-    default: 'World'
-outputs:
-  time: # id of output
-    description: 'The time we we greeted you'
 runs:
   using: 'node12'
   main: 'index.js'
