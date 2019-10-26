@@ -18,9 +18,8 @@ const exec = require('@actions/exec');
 
     console.log("KinD cluster is running now.")
     await exec.exec('bash ./Kube-Test/prepare.sh');
-    await exec.exec('ansible-playbook', ['-v', './.kubetest/ci.yml'])
     
-    console.log("Kube Test Action is terminating...")
+    //await exec.exec('ansible-playbook', ['-v', './.kubetest/ci.yml'])
   } catch (error) {
     core.setFailed(error.message);
   }
