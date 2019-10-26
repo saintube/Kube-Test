@@ -14,7 +14,7 @@ const exec = require('@actions/exec');
     await exec.exec('sleep 120s')
 
     await exec.exec('wget -O ./Kube-Test/kubeconfig http://172.17.0.2:10080/config')
-    await exec.exec('sed -i "s/172.17.0.2/minikube/g" ./Kube-Test/kubeconfig')
+    await exec.exec('sed -i "s/localhost/172.17.0.2/g" ./Kube-Test/kubeconfig')
 
     console.log("KinD cluster is running now.")
 
