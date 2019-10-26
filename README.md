@@ -17,9 +17,6 @@ jobs:
   test_action:
     runs-on: ubuntu-latest
     steps:
-      # Setup a KinD cluster
-      - name: KinD (Kubernetes in Docker) Action
-        uses: engineerd/setup-kind@v0.1.0
       - name: Checkout
         uses: actions/checkout@master
       # Specify our action
